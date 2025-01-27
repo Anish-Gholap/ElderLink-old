@@ -1,4 +1,5 @@
 const Event = require('../models/event')
+const User = require('../models/user')
 
 const initialEvents = [
   {
@@ -13,12 +14,37 @@ const initialEvents = [
   }
 ]
 
+const initialUsers = [
+  {
+    username: "jack",
+    name: "jack",
+    password: "jack"
+  },
+  {
+    username: "john",
+    name:"john",
+    password: "john"
+  }
+]
+
 const eventsInDb = async () => {
   const events = await Event.find({})
   return events.map(event => event.toJSON() )
 }
 
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users.map(user => user.toJSON())
+}
+
+const getRandomUserId = async () => {
+  const users = await User.find({})
+  const randomUser= Math.floor(Math.random() * users.length)
+
+  return users[randomUser]._id.toString()
+}
+
 
 module.exports = {
-  initialEvents, eventsInDb
+  initialEvents, initialUsers, eventsInDb, usersInDb, getRandomUserId
 }
