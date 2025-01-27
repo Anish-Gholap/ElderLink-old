@@ -27,7 +27,7 @@ export default [
       ],
       '@stylistic/js/quotes': [
         'error',
-        'single'
+        'never'
       ],
       '@stylistic/js/semi': [
         'error',

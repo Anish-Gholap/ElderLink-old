@@ -2,7 +2,7 @@ POST http://localhost:3002/api/events
 Content-Type: application/json
 
 {
-  "title": "Mahjong at Nanyang CC",
-  "description": "Casual game of Mahjong for beginners.",
+  "title": "Checkers at Nanyang CC",
+  "description": "Casual game of Checkers for beginners.",
   "dateTime": "2025-01-21T17:00:00"
 }

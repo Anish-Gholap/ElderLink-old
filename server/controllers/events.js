@@ -1,6 +1,8 @@
 const eventsRouter = require('express').Router()
 const Event = require('../models/event')
 
+/* Errors are automatically caught and sent to the error handler */
+
 // Get all events
 eventsRouter.get('/', async (request, response) => {
   const events = await Event.find({})
@@ -9,16 +11,12 @@ eventsRouter.get('/', async (request, response) => {
 
 // Get specific event
 eventsRouter.get('/:id', async (request, response, next) => {
-  try {
-    const event = await Event.findById(request.params.id)
+  const event = await Event.findById(request.params.id)
     if (event) {
       response.json(event)
     } else {
       response.status(404).end()
     }
-  } catch (error) {
-    next(error)
-  }
 })
 
 // Add event to DB

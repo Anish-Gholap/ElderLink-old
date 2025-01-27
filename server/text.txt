@@ -1,0 +1,12 @@
+Event Creation Page
+
+x.1 System must display input fields for the respective event details
+  x.1.2 The event title type data must be text of atleast one character and less than 512 characters
+  x.1.3 The event description must be text of atleast one character
+  x.1.4 The system must display calender and time slots for selection
+
+x.2 Upon submission of the event request:
+  x.2.1 System must save event to the database
+  x.2.2 System must show confirmation of successful event creation
+  
+
