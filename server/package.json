@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
-    "test": "cross-env NODE_ENV=test node --test",
+    "test": "cross-env NODE_ENV=test node --test --test-concurrency=1",
     "lint": "eslint"
   },
   "author": "Group 5",
@@ -18,7 +18,8 @@
     "express": "^4.21.2",
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.9.5"
+    "mongoose": "^8.9.5",
+    "server": "file:"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

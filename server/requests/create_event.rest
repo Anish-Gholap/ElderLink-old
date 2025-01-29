@@ -1,10 +1,9 @@
 POST http://localhost:3002/api/events
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuaXNoIiwiaWQiOiI2Nzk3YmIzNGM2N2ZjNmNhOWJmMjFhZGMiLCJpYXQiOjE3MzgwMDEyODd9.E3m7mckzXnR7eod_GFB0L92NmAMR_AiALhgf8gkIGGY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuaXNoIiwiaWQiOiI2Nzk3YmIzNGM2N2ZjNmNhOWJmMjFhZGMiLCJpYXQiOjE3MzgxNjQzODUsImV4cCI6MTczODE2Nzk4NX0.d_Wf8kO9tNfcv6hM-CxsdUZ5uy_iXvDdvOfXLqiQUoI
 
 {
   "title": "Squash at Nanyang CC",
   "description": "Casual game of Squash for beginners.",
-  "dateTime": "2025-01-21T17:00:00",
-  "userId": "6797bb34c67fc6ca9bf21adc"
+  "dateTime": "2025-01-21T17:00:00"
 }

@@ -14,19 +14,6 @@ const initialEvents = [
   }
 ]
 
-const initialUsers = [
-  {
-    username: "jack",
-    name: "jack",
-    password: "jack"
-  },
-  {
-    username: "john",
-    name:"john",
-    password: "john"
-  }
-]
-
 const eventsInDb = async () => {
   const events = await Event.find({})
   return events.map(event => event.toJSON() )
@@ -37,14 +24,7 @@ const usersInDb = async () => {
   return users.map(user => user.toJSON())
 }
 
-const getRandomUserId = async () => {
-  const users = await User.find({})
-  const randomUser= Math.floor(Math.random() * users.length)
-
-  return users[randomUser]._id.toString()
-}
-
 
 module.exports = {
-  initialEvents, initialUsers, eventsInDb, usersInDb, getRandomUserId
+  initialEvents, eventsInDb, usersInDb
 }

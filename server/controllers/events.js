@@ -2,6 +2,7 @@ const eventsRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
 const Event = require('../models/event')
 const User = require('../models/user')
+const event = require('../models/event')
 
 /* Errors are automatically caught and sent to the error handler */
 
@@ -35,20 +36,14 @@ eventsRouter.get('/:id', async (request, response, next) => {
 eventsRouter.post('/', async (request, response) => {
   const body = request.body
 
-  // decode token to verify
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-  if (!decodedToken) {
-    return response.status(401).json({error: 'token invalid'})
-  }
-
-  // add user who created event
-  const user = await User.findById(body.userId)
+  // find user using userExtractor middlewear
+  const user = request.user
 
   const event = new Event({
     title: body.title,
     description: body.description,
     dateTime: body.dateTime,
-    createdBy: user.id
+    createdBy: user._id
   })
 
   const savedEvent = await event.save()
@@ -56,7 +51,33 @@ eventsRouter.post('/', async (request, response) => {
   // update user object to show event created
   user.eventsCreated = user.eventsCreated.concat(savedEvent._id)
   await user.save()
+
   response.status(201).json(savedEvent)
+})
+
+// Remove event from DB (only by event creator)
+eventsRouter.delete('/:id', async (request, response) => {
+  const body = request.body
+
+  // get event to delete
+  const eventToDelete = await Event.findById(request.params.id)
+
+  // find user using userExtractor middlewear
+  const user = request.user
+
+  // check if event belongs to user
+  if (eventToDelete.createdBy.toString() !== user._id.toString()) {
+    return response.status(401).json({error: 'Not authorised to delete this event'})
+  }
+
+  // delete event
+  await Event.findByIdAndDelete(request.params.id)
+
+  // remove event from user object
+  user.eventsCreated = user.eventsCreated.filter(({_id}) => eventToDelete._id.toString() !== _id.toString())
+  await user.save()
+  
+  response.status(204).end()
 })
 
 module.exports = eventsRouter
