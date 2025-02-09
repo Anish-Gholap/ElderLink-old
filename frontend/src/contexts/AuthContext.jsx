@@ -16,7 +16,7 @@ export const AuthProvider = ({children}) => {
   // load user from local storage when the app starts
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"))
-
+    
     if(storedUser) {
       setUser(storedUser)
     }

@@ -1,9 +1,9 @@
 POST http://localhost:3002/api/events
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuaXNoIiwiaWQiOiI2Nzk3YmIzNGM2N2ZjNmNhOWJmMjFhZGMiLCJpYXQiOjE3MzgxNjQzODUsImV4cCI6MTczODE2Nzk4NX0.d_Wf8kO9tNfcv6hM-CxsdUZ5uy_iXvDdvOfXLqiQUoI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhhc2hpbCIsImlkIjoiNjdhOGM4MzcxMTMzOTIzN2Y1ZDE4YWY2IiwiaWF0IjoxNzM5MTIxODg2LCJleHAiOjE3MzkxMjU0ODZ9.niJno9uwCFXr3CJfhAV4tABO2BnayQnGt9_KRbWgMEA
 
 {
-  "title": "Squash at Nanyang CC",
-  "description": "Casual game of Squash for beginners.",
-  "dateTime": "2025-01-21T17:00:00"
+  "title": "Golf at Nanyang CC",
+  "description": "Casual game of golf for beginners.",
+  "dateTime": "2025-03-21T17:00:00"
 }

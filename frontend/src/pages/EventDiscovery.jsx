@@ -1,8 +1,15 @@
+import EventCard from "../components/EventCard"
+import {useEventsContext} from "../contexts/EventsContext"
+
 const EventDiscovery = () => {
+  const {allEvents} = useEventsContext()
+
   return (
-    <div>
-      <h2> No events currently taking place </h2>
-    </div>
+    <>
+      {allEvents.map(event => 
+        <EventCard event={event} key={event.id} />
+      )}
+    </>
   )
 }
 

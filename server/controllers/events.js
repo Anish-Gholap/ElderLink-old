@@ -16,20 +16,27 @@ const getTokenFrom = request => {
   return null
 }
 
-// Get all events
+// Get events with an optional query
 eventsRouter.get('/', async (request, response) => {
-  const events = await Event.find({}).populate('createdBy', {username: 1, name: 1})
+  const { createdBy } = request.query
+
+  const filter = {}
+  if (createdBy) {
+    filter.createdBy = createdBy
+  }
+
+  const events = await Event.find(filter).populate('createdBy', { username: 1, name: 1 })
   response.json(events)
 })
 
 // Get specific event
 eventsRouter.get('/:id', async (request, response, next) => {
   const event = await Event.findById(request.params.id)
-    if (event) {
-      response.json(event)
-    } else {
-      response.status(404).end()
-    }
+  if (event) {
+    response.json(event)
+  } else {
+    response.status(404).end()
+  }
 })
 
 // Add event to DB
@@ -47,7 +54,7 @@ eventsRouter.post('/', async (request, response) => {
   })
 
   const savedEvent = await event.save()
-  
+
   // update user object to show event created
   user.eventsCreated = user.eventsCreated.concat(savedEvent._id)
   await user.save()
@@ -67,16 +74,16 @@ eventsRouter.delete('/:id', async (request, response) => {
 
   // check if event belongs to user
   if (eventToDelete.createdBy.toString() !== user._id.toString()) {
-    return response.status(401).json({error: 'Not authorised to delete this event'})
+    return response.status(401).json({ error: 'Not authorised to delete this event' })
   }
 
   // delete event
   await Event.findByIdAndDelete(request.params.id)
 
   // remove event from user object
-  user.eventsCreated = user.eventsCreated.filter(({_id}) => eventToDelete._id.toString() !== _id.toString())
+  user.eventsCreated = user.eventsCreated.filter(({ _id }) => eventToDelete._id.toString() !== _id.toString())
   await user.save()
-  
+
   response.status(204).end()
 })
 
