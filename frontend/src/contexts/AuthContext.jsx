@@ -1,6 +1,16 @@
 /* eslint-disable react-refresh/only-export-components */
 // Context to save currently logged in user amongst all required pages if refreshed
 
+/* 
+  User object: {
+    token,
+    username,
+    name,
+    id,
+    token expiry time
+  }
+*/
+
 import { createContext, useState, useEffect, useContext } from "react";
 
 const AuthContext = createContext()
@@ -32,9 +42,23 @@ export const AuthProvider = ({children}) => {
     }
   }, [user])
 
+  // logout user if token has expired
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (user && user.tokenExpiresAt < Date.now()) {
+        window.alert("Session Expired! Please Login Again")
+        logout()
+      }
+    }, 5000) // run every 5 seconds
+
+    return () => clearInterval(interval)
+    
+  },[user])
+
   // Helper functions
   const login = (userData) => {
     setUser(userData)
+    console.log(user)
   }
 
   const logout = () => {

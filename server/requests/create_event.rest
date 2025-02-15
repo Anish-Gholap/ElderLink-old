@@ -1,9 +1,11 @@
 POST http://localhost:3002/api/events
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhhc2hpbCIsImlkIjoiNjdhOGM4MzcxMTMzOTIzN2Y1ZDE4YWY2IiwiaWF0IjoxNzM5MTIxODg2LCJleHAiOjE3MzkxMjU0ODZ9.niJno9uwCFXr3CJfhAV4tABO2BnayQnGt9_KRbWgMEA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imhhc2hpbCIsImlkIjoiNjdhOGM4MzcxMTMzOTIzN2Y1ZDE4YWY2IiwiaWF0IjoxNzM5NjE2NDcxLCJleHAiOjE3Mzk2MjAwNzF9.v1Z-OGo8dnpkveXgsUmd36z3tJXImc8nTwAoRPpKNAs
 
 {
   "title": "Golf at Nanyang CC",
+  "location": "Nanyang CC",
+  "numAttendees": 4,
   "description": "Casual game of golf for beginners.",
-  "dateTime": "2025-03-21T17:00:00"
+  "dateTime": "20/02/25, 7pm"
 }

@@ -1,11 +1,15 @@
 import "../css/eventcard.css"
+import { Link } from "react-router-dom"
 
 const EventCard = ({event}) => {
   return (
-    <div className="event-card">
-      <h3 className="event-title">{event.title}</h3>
-      <p className="event-datetime">{event.dateTime}</p>
-    </div>
+    <Link to={`/events/${event.id}`} className="event-card-link">
+      <div className="event-card">
+        <h3 className="event-title">{event.title}</h3>
+        <p className="event-location">{event.location}</p>
+        <p className="event-datetime">{event.dateTime}</p>
+      </div>
+    </Link>
   )
 }
 

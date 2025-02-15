@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import LoginForm from "../components/LoginForm"
 import loginService from "../services/login"
 import { useAuthContext } from "../contexts/AuthContext"
@@ -9,6 +9,12 @@ const Login = () => {
   const [password, setPassword] = useState("")
   const { login } = useAuthContext() // access login helper function from AuthContext
   const navigate = useNavigate()
+
+  // clear localStorage to force login if LoginPage was loaded outside of app flow
+  useEffect(() => {
+    window.localStorage.clear()
+    console.log("local storage cleared")
+  }, [])
 
 
   // handle login form submission

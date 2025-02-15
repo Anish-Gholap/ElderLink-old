@@ -5,8 +5,10 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  description: String,
+  location: String,
+  numAttendees : Number,
   dateTime: String,
+  description: String,
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

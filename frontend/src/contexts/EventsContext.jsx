@@ -36,7 +36,8 @@ export const EventsProvider = ({ children }) => {
 
   // helper functions to refetch and update local state to keep everything in sync
   const addEvent = async (eventData) => {
-    const response = await eventsService.createEvent(eventData)
+    // send token for authorization
+    const response = await eventsService.createEvent(eventData, user.token)
     console.log(response)
     
     const refreshedAll = await eventsService.getAllEvents()
@@ -50,7 +51,8 @@ export const EventsProvider = ({ children }) => {
   }
 
   const removeEvent = async (eventId) => {
-    await eventsService.deleteEvent(eventId)
+    // send token for authorization
+    await eventsService.deleteEvent(eventId, user.token)
 
     const refreshedAll = await eventsService.getAllEvents();
     setAllEvents(refreshedAll);
@@ -61,11 +63,72 @@ export const EventsProvider = ({ children }) => {
     }
   }
 
+  const getEvent = async (eventId) => {
+    if (!eventId) return null
+
+    try {
+      const fetchedEvent = await eventsService.getEventById(eventId)
+      return fetchedEvent
+    } catch (error) {
+      console.error("Error fetching event:", error)
+    }
+  }
+
+  const updateEvent = async (eventId, eventData) => {
+    try {
+      await eventsService.editEvent(eventId, eventData, user.token)
+
+      // refresh event lists after update
+      const refreshedAll = await eventsService.getAllEvents()
+      setAllEvents(refreshedAll)
+
+      if (user?.id) {
+        const refreshedMine = await eventsService.getUserEvents(user.id);
+        setMyEvents(refreshedMine);
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const joinEvent = async (eventId) => {
+    // get event to join
+    try {
+      const event = await eventsService.getEventById(eventId)
+
+      if (!event) {
+        console.error("Event not found")
+        return
+      }
+
+      // send updated event
+      await eventsService.joinEvent(eventId, user.id)
+      window.alert("Joined event successfully")
+
+      // refresh event lists after update
+      const refreshedAll = await eventsService.getAllEvents()
+      setAllEvents(refreshedAll)
+
+      if (user?.id) {
+        const refreshedMine = await eventsService.getUserEvents(user.id);
+        setMyEvents(refreshedMine);
+      }
+
+    } catch (error) {
+      console.error("Failed to join event:", error)
+    }
+    
+  }
+
   const value = {
     allEvents,
     myEvents,
     addEvent,
-    removeEvent
+    removeEvent,
+    getEvent,
+    updateEvent,
+    joinEvent
   }
 
   return (

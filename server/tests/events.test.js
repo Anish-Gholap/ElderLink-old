@@ -65,7 +65,7 @@ describe('testing GET request to /api/events', () => {
 })
 
 // test adding events to DB
-describe('testing PUT request to /api/events', () => {
+describe('testing POST request to /api/events', () => {
   test('succeeds with valid data', async () => {
     const newEvent = {
       title: "Mahjong at Nanyang CC",
@@ -160,6 +160,47 @@ describe("removing event from database", () => {
 
     const titles = eventsAtEnd.map(event => event.title)
     assert(!(titles.includes(tempEvent.title)))
+  })
+})
+
+
+describe("editing event in the database", () => {
+  test("succeeds with status code 200 if successful", async () => {
+    const tempEvent = {
+      title: "tempEvent",
+      description: "tempEvent",
+      dateTime: "21/01/25 14:00hrs",
+    }
+
+    const response = await api
+      .post('/api/login')
+      .send({
+        username: 'eventsTest',
+        password: 'eventsTest'
+      })
+      .expect(200)
+
+    await api
+      .post('/api/events')
+      .send(tempEvent)
+      .set('Authorization', `Bearer ${response.body.token}`)
+      .expect(201)
+      
+    const eventsAtStart = await Event.find({})
+    const eventToEdit = eventsAtStart[eventsAtStart.length - 1]
+    
+    eventToEdit.title = "editedTitle"
+
+    await api
+      .put(`/api/events/${eventToEdit._id}`)
+      .send(eventToEdit)
+      .set('Authorization', `Bearer ${response.body.token}`) // for the user extractor to find the user
+      .expect(200)
+
+    // check to see if edit was successful
+    const eventsAtEnd = await Event.find({})
+    const editedEvent = eventsAtEnd[eventsAtEnd.length - 1]
+    assert.notStrictEqual(editedEvent.title, tempEvent.title)
   })
 })
 
