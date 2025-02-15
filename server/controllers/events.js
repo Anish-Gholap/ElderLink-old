@@ -16,20 +16,27 @@ const getTokenFrom = request => {
   return null
 }
 
-// Get all events
+// Get events with an optional query
 eventsRouter.get('/', async (request, response) => {
-  const events = await Event.find({}).populate('createdBy', {username: 1, name: 1})
+  const { createdBy } = request.query
+
+  const filter = {}
+  if (createdBy) {
+    filter.createdBy = createdBy
+  }
+
+  const events = await Event.find(filter).populate('createdBy', { username: 1, name: 1 })
   response.json(events)
 })
 
 // Get specific event
 eventsRouter.get('/:id', async (request, response, next) => {
   const event = await Event.findById(request.params.id)
-    if (event) {
-      response.json(event)
-    } else {
-      response.status(404).end()
-    }
+  if (event) {
+    response.json(event)
+  } else {
+    response.status(404).end()
+  }
 })
 
 // Add event to DB
@@ -43,11 +50,13 @@ eventsRouter.post('/', async (request, response) => {
     title: body.title,
     description: body.description,
     dateTime: body.dateTime,
+    location: body.location,
+    numAttendees: body.numAttendees,
     createdBy: user._id
   })
 
   const savedEvent = await event.save()
-  
+
   // update user object to show event created
   user.eventsCreated = user.eventsCreated.concat(savedEvent._id)
   await user.save()
@@ -67,17 +76,68 @@ eventsRouter.delete('/:id', async (request, response) => {
 
   // check if event belongs to user
   if (eventToDelete.createdBy.toString() !== user._id.toString()) {
-    return response.status(401).json({error: 'Not authorised to delete this event'})
+    return response.status(401).json({ error: 'Not authorised to delete this event' })
   }
 
   // delete event
   await Event.findByIdAndDelete(request.params.id)
 
   // remove event from user object
-  user.eventsCreated = user.eventsCreated.filter(({_id}) => eventToDelete._id.toString() !== _id.toString())
+  user.eventsCreated = user.eventsCreated.filter(({ _id }) => eventToDelete._id.toString() !== _id.toString())
   await user.save()
-  
+
   response.status(204).end()
 })
+
+// edit event (only by event creator)
+eventsRouter.put('/:id', async (request, response) => {
+  const body = request.body
+
+  // get event to edit
+  const eventToEdit = await Event.findById(request.params.id)
+
+  // find user
+  const user = request.user
+
+  // check if event belongs to user
+  if (eventToEdit.createdBy.toString() !== user._id.toString()) {
+    return response.status(401).json({ error: 'Not authorised to edit this event' })
+  }
+
+  // update event
+  const updatedEvent = await Event.findByIdAndUpdate(eventToEdit.id, body, {
+    new: true,
+    runValidators: true,
+  })
+
+  if (!updatedEvent) {
+    return response.status(404).json({error: "Event not found"})
+  }
+
+  response.json(updatedEvent).status(200).end()
+})
+
+// join event 
+eventsRouter.patch('/:id', async (request, response) => {
+  const { userId } = request.body; // User ID from request
+  console.log("backend", userId)
+
+  const event = await Event.findById(request.params.id);
+  if (!event) {
+    return response.status(404).json({ error: "Event not found" });
+  }
+
+  // Check if user is already in attendees list
+  if (event.attendees.includes(userId)) {
+    return response.status(400).json({ error: "User already joined this event" });
+  }
+
+  // Add user to attendees array
+  event.attendees = event.attendees.concat(userId);
+  await event.save();
+
+  response.status(200).json({ message: "User joined event successfully", event });
+})
+
 
 module.exports = eventsRouter

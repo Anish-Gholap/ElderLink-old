@@ -1,0 +1,2 @@
+GET http://localhost:3002/api/events?createdBy=6797bb34c67fc6ca9bf21adc
+Content-Type: application/json
